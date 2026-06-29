@@ -1,25 +1,48 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="debug" style="padding: 20px; color: red; font-family: sans-serif;">Loading...</div>
+    <div id="status" style="padding: 20px; color: red;"></div>
     <div id="product-grid" class="container"></div>
 
     <script>
         async function loadSite() {
-            const debug = document.getElementById('debug');
+            const grid = document.getElementById('product-grid');
+            const status = document.getElementById('status');
+            
             try {
-                const response = await fetch('manifest.json');
-                if (!response.ok) throw new Error("Could not find manifest.json at root");
-                
-                const manifest = await response.json();
-                debug.innerText = "Manifest loaded! Products found: " + manifest.products.length;
-                
-                // If we get here, the manifest works!
-            } catch (err) {
-                debug.innerText = "CRITICAL ERROR: " + err.message;
+                const manifestRes = await fetch('manifest.json');
+                const { products } = await manifestRes.json();
+                status.innerText = "Manifest loaded! Products found: " + products.length;
+
+                for (const folder of products) {
+                    try {
+                        const dataRes = await fetch(`products/${folder}/data.json`);
+                        const data = await dataRes.json();
+                        
+                        const imgRes = await fetch(`products/${folder}/Img.json`);
+                        const imgData = await imgRes.json();
+                        
+                        const imageUrl = (imgData.images && imgData.images.length > 0) ? imgData.images[0] : '';
+
+                        grid.innerHTML += `
+                            <div class="card">
+                                ${imageUrl ? `<img src="${imageUrl}" alt="${data.name}">` : ''}
+                                <h3>${data.name}</h3>
+                                <p>${data.price}</p>
+                                <a href="payments.html" class="btn">Buy Now</a>
+                            </div>
+                        `;
+                    } catch (e) {
+                        status.innerText = "Error loading " + folder + ": " + e.message;
+                        console.error(e);
+                    }
+                }
+            } catch (e) {
+                status.innerText = "Manifest Error: " + e.message;
             }
         }
         loadSite();
