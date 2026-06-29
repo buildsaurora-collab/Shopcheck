@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="product-grid" class="container"></div>
+
+    <script>
+        async function loadSite() {
+            const grid = document.getElementById('product-grid');
+            const manifestRes = await fetch('manifest.json');
+            const { products } = await manifestRes.json();
+
+            for (const folder of products) {
+                try {
+                    const [dataRes, imgRes] = await Promise.all([
+                        fetch(`products/${folder}/data.json`),
+                        fetch(`products/${folder}/Img.json`)
+                    ]);
+                    
+                    const data = await dataRes.json();
+                    const imgData = await imgRes.json();
+                    
+                    const imageHtml = imgData.images && imgData.images.length > 0 
+                        ? `<img src="${imgData.images[0]}" alt="${data.name}">` 
+                        : '<div class="no-image">No Image</div>';
+
+                    grid.innerHTML += `
+                        <div class="card">
+                            ${imageHtml}
+                            <h3>${data.name}</h3>
+                            <p>${data.price}</p>
+                            <a href="payments.html" class="btn">Buy Now</a>
+                        </div>
+                    `;
+                } catch (err) {
+                    console.error("Error loading " + folder, err);
+                }
+            }
+        }
+        loadSite();
+    </script>
+</body>
+</html>
