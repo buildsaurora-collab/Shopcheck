@@ -1,48 +1,25 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="status" style="padding: 20px; color: red;"></div>
+    <div id="debug" style="padding: 20px; color: red; font-family: sans-serif;">Loading...</div>
     <div id="product-grid" class="container"></div>
 
     <script>
         async function loadSite() {
-            const grid = document.getElementById('product-grid');
-            const status = document.getElementById('status');
-            
+            const debug = document.getElementById('debug');
             try {
-                const manifestRes = await fetch('manifest.json');
-                if (!manifestRes.ok) throw new Error("Could not find manifest.json");
+                const response = await fetch('manifest.json');
+                if (!response.ok) throw new Error("Could not find manifest.json at root");
                 
-                const { products } = await manifestRes.json();
-
-                for (const folder of products) {
-                    try {
-                        const [dataRes, imgRes] = await Promise.all([
-                            fetch(`products/${folder}/data.json`),
-                            fetch(`products/${folder}/Img.json`)
-                        ]);
-                        
-                        const data = await dataRes.json();
-                        const imgData = await imgRes.json();
-                        
-                        grid.innerHTML += `
-                            <div class="card">
-                                <img src="${imgData.images[0]}" alt="${data.name}">
-                                <h3>${data.name}</h3>
-                                <p>${data.price}</p>
-                                <a href="payments.html" class="btn">Buy Now</a>
-                            </div>
-                        `;
-                    } catch (e) {
-                        console.error("Error with product " + folder, e);
-                    }
-                }
-            } catch (e) {
-                status.innerText = "Error: " + e.message;
+                const manifest = await response.json();
+                debug.innerText = "Manifest loaded! Products found: " + manifest.products.length;
+                
+                // If we get here, the manifest works!
+            } catch (err) {
+                debug.innerText = "CRITICAL ERROR: " + err.message;
             }
         }
         loadSite();
