@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Checkout</title>
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Extra styles to match the store page */
+        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .checkout-card { 
+            background: #fff; 
+            padding: 40px; 
+            border-radius: 20px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            max-width: 400px; 
+            width: 100%; 
+        }
+        .checkout-card h1 { margin-bottom: 20px; color: #2c3e50; }
+        .checkout-card p { margin-bottom: 30px; color: #666; }
+        .lock-icon { font-size: 2rem; margin-bottom: 10px; color: #27ae60; }
+    </style>
 </head>
 <body>
-    <div class="container" style="text-align: center; padding-top: 50px;">
+
+    <div class="checkout-card">
+        <div class="lock-icon">🔒</div>
         <h1>Secure Checkout</h1>
-        <p>Proceed to payment for your selected item.</p>
-        <a href="index.html" class="btn">Back to Store</a>
+        <p>Your payment is encrypted and processed securely. Proceed to finalize your order.</p>
+        
+        <a href="https://buy.stripe.com/your-link-here" class="btn" style="margin-bottom: 15px; display: block;">Complete Payment</a>
+        <a href="index.html" style="color: #666; text-decoration: none; font-size: 0.9rem;">← Back to Shop</a>
     </div>
+
 </body>
 </html>
