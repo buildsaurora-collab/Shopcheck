@@ -2,10 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Premium Store</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div id="status" style="padding: 20px; color: red;"></div>
+
+    <header>
+        <h1>Our Premium Collection</h1>
+    </header>
+
+    <div id="status" style="text-align: center; color: #666; margin-bottom: 20px;">Loading catalog...</div>
     <div id="product-grid" class="container"></div>
 
     <script>
@@ -16,33 +23,35 @@
             try {
                 const manifestRes = await fetch('manifest.json');
                 const { products } = await manifestRes.json();
-                status.innerText = "Manifest loaded! Products found: " + products.length;
+                status.style.display = 'none';
 
                 for (const folder of products) {
                     try {
-                        const dataRes = await fetch(`products/${folder}/data.json`);
-                        const data = await dataRes.json();
+                        const [dataRes, imgRes] = await Promise.all([
+                            fetch(`products/${folder}/data.json`),
+                            fetch(`products/${folder}/Img.json`)
+                        ]);
                         
-                        const imgRes = await fetch(`products/${folder}/Img.json`);
+                        const data = await dataRes.json();
                         const imgData = await imgRes.json();
                         
                         const imageUrl = (imgData.images && imgData.images.length > 0) ? imgData.images[0] : '';
 
                         grid.innerHTML += `
                             <div class="card">
-                                ${imageUrl ? `<img src="${imageUrl}" alt="${data.name}">` : ''}
+                                ${imageUrl ? `<img src="${imageUrl}" alt="${data.name}">` : '<div class="no-img">No Image</div>'}
                                 <h3>${data.name}</h3>
-                                <p>${data.price}</p>
+                                <p class="desc">${data.description}</p>
+                                <p class="price">${data.price}</p>
                                 <a href="payments.html" class="btn">Buy Now</a>
                             </div>
                         `;
                     } catch (e) {
-                        status.innerText = "Error loading " + folder + ": " + e.message;
-                        console.error(e);
+                        console.error("Error loading " + folder, e);
                     }
                 }
             } catch (e) {
-                status.innerText = "Manifest Error: " + e.message;
+                status.innerText = "Error loading store: " + e.message;
             }
         }
         loadSite();
