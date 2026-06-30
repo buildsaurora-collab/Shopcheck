@@ -2,36 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Secure Checkout</title>
-    <link rel="stylesheet" href="style.css">
     <style>
-        /* Extra styles to match the store page */
-        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .checkout-card { 
-            background: #fff; 
-            padding: 40px; 
-            border-radius: 20px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
-            text-align: center; 
-            max-width: 400px; 
-            width: 100%; 
-        }
-        .checkout-card h1 { margin-bottom: 20px; color: #2c3e50; }
-        .checkout-card p { margin-bottom: 30px; color: #666; }
-        .lock-icon { font-size: 2rem; margin-bottom: 10px; color: #27ae60; }
+        body { background: #f0f4f8; color: #1e293b; font-family: 'Fredoka', sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .box { background: #fff; padding: 50px; border-radius: 40px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); text-align: center; max-width: 400px; border: 4px solid #e2e8f0; }
+        .email-box { background: #eff6ff; padding: 20px; border-radius: 20px; margin: 25px 0; border: 2px dashed #3b82f6; font-size: 1.2rem; color: #1d4ed8; font-weight: bold; }
+        .back-link { color: #64748b; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-
-    <div class="checkout-card">
-        <div class="lock-icon">🔒</div>
-        <h1>Secure Checkout</h1>
-        <p>Your payment is encrypted and processed securely. Proceed to finalize your order.</p>
-        
-        <a href="https://buy.stripe.com/your-link-here" class="btn" style="margin-bottom: 15px; display: block;">Complete Payment</a>
-        <a href="index.html" style="color: #666; text-decoration: none; font-size: 0.9rem;">← Back to Shop</a>
+    <div class="box">
+        <h1>Payment Details</h1>
+        <p>You're almost there! Send payment to:</p>
+        <div class="email-box">payments@yourcompany.com</div>
+        <p style="font-size: 0.9rem; color: #94a3b8;">Include the product name in your note.</p>
+        <br>
+        <a href="index.html" class="back-link">← Return to Store</a>
     </div>
-
 </body>
 </html>
